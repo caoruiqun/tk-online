@@ -1,0 +1,16 @@
+server:
+  port: 8086
+spring:
+  application:
+    name: sms-service
+  rabbitmq:
+    host: 127.0.0.1
+    username: taikang
+    password: taikang
+    virtual-host: /taikang
+tk:
+  sms:
+    accessKeyId: LTAIf5vJTEe70iPa
+    accessKeySecret: A2ZGBWfrkz9arF908cmDWXmIrAlngA
+    signName: 泰康保险
+    verifyCodeTemplate: SMS_133976814

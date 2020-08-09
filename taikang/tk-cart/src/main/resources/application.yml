@@ -1,0 +1,16 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: cart-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+tk:
+  jwt:
+    pubKeyPath: D:\tmp\rsa\rsa.pub #公钥地址
+    cookieName: TK_TOKEN
