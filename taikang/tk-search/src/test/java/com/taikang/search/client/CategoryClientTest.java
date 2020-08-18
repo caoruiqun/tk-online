@@ -28,4 +28,5 @@ public class CategoryClientTest {
             System.out.println("category = " + category);
         }
     }
+
 }

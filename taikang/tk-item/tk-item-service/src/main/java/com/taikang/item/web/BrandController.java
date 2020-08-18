@@ -28,15 +28,14 @@ public class BrandController {
     * @return
     */
     @GetMapping("/page")
-//    public ResponseEntity<Page<Brand>> getBrandListByPage(@RequestParam(value = "page",defaultValue = "1") Integer pageNum,
-    public ResponseEntity<PageResult<Brand>> getBrandListByPage(@RequestParam(value = "page",defaultValue = "1") Integer pageNum,
-                                                                @RequestParam(value = "rows",defaultValue = "5") Integer pageSize,
-                                                                @RequestParam(value = "sortBy",required = false) String orderBy,
-                                                                @RequestParam(value = "desc",defaultValue = "false") Boolean desc,
-                                                                @RequestParam(value = "key",required = false) String key) {
-//        Page<Brand> brandPage = brandService.getBrandListByPage(pageNum, pageSize, orderBy, desc, key);
-        PageResult<Brand> result = brandService.getBrandListByPage(pageNum, pageSize, orderBy, desc, key);
-
+//    public ResponseEntity<Page<Brand>> queryBrandByPage(@RequestParam(value = "page",defaultValue = "1") Integer pageNum,
+    public ResponseEntity<PageResult<Brand>> queryBrandByPage(@RequestParam(value = "page",defaultValue = "1") Integer pageNum,
+                                                              @RequestParam(value = "rows",defaultValue = "5") Integer pageSize,
+                                                              @RequestParam(value = "sortBy",required = false) String orderBy,
+                                                              @RequestParam(value = "desc",defaultValue = "false") Boolean desc,
+                                                              @RequestParam(value = "key",required = false) String key) {
+//        Page<Brand> brandPage = brandService.queryBrandByPage(pageNum, pageSize, orderBy, desc, key);
+        PageResult<Brand> result = brandService.queryBrandByPage(pageNum, pageSize, orderBy, desc, key);
         return ResponseEntity.ok(result);
     }
 
@@ -69,14 +68,14 @@ public class BrandController {
      * @param id
      * @return
      */
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Brand> queryBrandById(@PathVariable("id") Long id){
         Brand brand = brandService.queryBrandById(id);
         return ResponseEntity.ok(brand);
     }
 
 
-    @GetMapping("/brands")
+    @GetMapping("/list")
     public ResponseEntity<List<Brand>> queryBrandByIds(@RequestParam("ids") List<Long> ids){
         return  ResponseEntity.ok(brandService.queryBrandByIds(ids));
     }

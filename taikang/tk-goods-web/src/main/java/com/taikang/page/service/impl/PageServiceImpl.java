@@ -58,14 +58,16 @@ public class PageServiceImpl implements PageService {
         //查询商品分类
         List<Category> categoryList = categoryClient.queryCategoryByIds(Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3()));
         //查询规格参数
-        List<SpecGroup> specGroupList = specificationClient.getSpecGroupsByCid(spu.getCid3());
-        List<SpecParam> specParam = specificationClient.getSpecParam(null, spu.getCid3(), null);
+//        List<SpecGroup> specGroupList = specificationClient.getSpecGroupsByCid(spu.getCid3());
+//        List<SpecParam> specParam = specificationClient.querySpecParamInfo(null, spu.getCid3(), null);
+        List<SpecGroup> specGroupList = specificationClient.queryGroupByCid(spu.getCid3());
 
         modelMap.put("spu",spu);
-        modelMap.put("spuDetail",spuDetail);
         modelMap.put("skus",skuList);
+        modelMap.put("spuDetail",spuDetail);
         modelMap.put("brand",brand);
         modelMap.put("categories",categoryList);
+        modelMap.put("specs",specGroupList);
 //        modelMap.put("specName",specName);
 //        modelMap.put("specValue",specValue);
 //        modelMap.put("groups",groups);
@@ -82,13 +84,10 @@ public class PageServiceImpl implements PageService {
         context.setVariables(loadModel(spuId));
         //输出流
         File dest = new File("D:\\zzzz", spuId + ".html");
-        if (dest.exists()) {
-            dest.delete();
-        }
-
-//        PrintWriter writer = null;
-        try {
-            PrintWriter writer = new PrintWriter(dest,"UTF-8");
+//        if (dest.exists()) {
+//            dest.delete();
+//        }
+        try (PrintWriter writer = new PrintWriter(dest,"UTF-8")){
             //生成 HTML
             templateEngine.process("item", context, writer);
         } catch (Exception e) {

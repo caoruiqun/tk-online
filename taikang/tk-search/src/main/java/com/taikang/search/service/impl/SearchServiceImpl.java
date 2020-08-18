@@ -135,7 +135,7 @@ public class SearchServiceImpl implements SearchService {
     private List<Map<String, Object>> buildSpecificationAgg(Long cid, QueryBuilder basicQuery) {
         List<Map<String, Object>> specs = new ArrayList<>();
         //查询需要聚合的规格参数
-        List<SpecParam> specParamList = specificationClient.getSpecParam(null, cid, true);
+        List<SpecParam> specParamList = specificationClient.querySpecParamInfo(null, cid, true);
         //聚合
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         //1.带上条件

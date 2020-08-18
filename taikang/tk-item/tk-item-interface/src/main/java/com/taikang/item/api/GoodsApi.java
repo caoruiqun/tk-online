@@ -22,28 +22,10 @@ public interface GoodsApi {
      * @Param [pageNum, pageSize, saleable, key]
      */
     @GetMapping("/spu/page")
-    PageResult<Spu> getSpuByPage(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
-                                 @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,
-                                 @RequestParam(value = "saleable", required = false) Boolean saleable,
-                                 @RequestParam(value = "key", required = false) String key);
-
-
-    /**
-     * 根据Spu的id查询商品详情
-     * @return
-     * @Param [spuId]
-     */
-    @GetMapping("/spu/detail/{id}")
-    SpuDetail getSpuDetailById(@PathVariable("id") Long spuId);
-
-
-    /**
-     * 根据spuId查询sku
-     * @return
-     * @Param [spuId]
-     */
-    @GetMapping("/sku/list")
-    List<Sku> getSkuListBySpuId(@RequestParam("id") Long spuId);
+    PageResult<Spu> querySpuByPage(@RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+                                   @RequestParam(value = "rows", defaultValue = "5") Integer pageSize,
+                                   @RequestParam(value = "saleable", required = false) Boolean saleable,
+                                   @RequestParam(value = "key", required = false) String key);
 
 
     /**
@@ -53,6 +35,27 @@ public interface GoodsApi {
      */
     @GetMapping("spu/{id}")
     Spu querySpuById(@PathVariable("id") Long id);
+
+
+    /**
+     * 根据Spu的id查询商品详情spuDetail
+     * @return
+     * @Param [spuId]
+     */
+    @GetMapping("/spu/detail/{id}")
+    SpuDetail querySpuDetailById(@PathVariable("id") Long spuId);
+
+
+    /**
+     * 根据spuId查询spu下面所有的sku
+     * @return
+     * @Param [spuId]
+     */
+    @GetMapping("/sku/list")
+    List<Sku> querySkuBySpuId(@RequestParam("id") Long spuId);
+
+
+
 
     /**
      * 根据sku的id查询sku
@@ -68,7 +71,7 @@ public interface GoodsApi {
      * @return
      */
     @GetMapping("/sku/list/ids")
-    List<Sku> getSkuListBySpuId(@RequestParam("ids") List<Long> ids);
+    List<Sku> querySkuBySpuId(@RequestParam("ids") List<Long> ids);
 
 }
 

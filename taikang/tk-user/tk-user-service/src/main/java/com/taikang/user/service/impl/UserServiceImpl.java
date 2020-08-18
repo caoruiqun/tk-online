@@ -136,9 +136,9 @@ public class UserServiceImpl implements UserService {
             User record = new User();
             record.setUsername(username);
             user = this.userMapper.selectOne(record);
-            hashOperations.put(user.getUsername(), JsonUtils.serialize(user));
+            hashOperations.put(user.getUsername(), JsonUtils.toString(user));
         } else {
-            user =  JsonUtils.parse(userStr,User.class);
+            user =  JsonUtils.toBean(userStr,User.class);
         }
 
 

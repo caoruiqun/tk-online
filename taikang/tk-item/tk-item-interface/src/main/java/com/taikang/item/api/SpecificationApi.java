@@ -15,7 +15,6 @@ public interface SpecificationApi {
 
     /**
      * 根据分类id查询分组
-     *
      * @return
      * @Param [cid]
      */
@@ -25,14 +24,13 @@ public interface SpecificationApi {
 
     /**
      * 根据条件查询规格参数
-     *
      * @return
      * @Param [gid, cid, searching]
      */
     @GetMapping("/spec/params")
-    List<SpecParam> getSpecParam(@RequestParam(value = "gid", required = false) Long gid,
-                                 @RequestParam(value = "cid", required = false) Long cid,
-                                 @RequestParam(value = "searching", required = false) Boolean searching);
+    List<SpecParam> querySpecParamInfo(@RequestParam(value = "gid", required = false) Long gid,
+                                       @RequestParam(value = "cid", required = false) Long cid,
+                                       @RequestParam(value = "searching", required = false) Boolean searching);
 
 
     @GetMapping("/spec/group")

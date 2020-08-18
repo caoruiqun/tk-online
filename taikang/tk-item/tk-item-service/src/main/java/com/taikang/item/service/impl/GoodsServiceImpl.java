@@ -7,6 +7,8 @@ import com.taikang.common.exception.TkException;
 import com.taikang.common.vo.PageResult;
 import com.taikang.item.mapper.*;
 import com.taikang.item.pojo.*;
+import com.taikang.item.service.BrandService;
+import com.taikang.item.service.CategoryService;
 import com.taikang.item.service.GoodsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -39,8 +41,14 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private StockMapper stockMapper;
 
+//    @Autowired
+//    private CategoryMapper categoryMapper;
+
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategoryService categoryService;
+
+    @Autowired
+    private BrandService brandService;
 
     @Autowired
     private BrandMapper brandMapper;
@@ -48,19 +56,20 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
+    /**
+    * 分页查询spu
+    * @Param [pageNum, pageSize, saleable, key]
+    * @return
+    */
     @Override
-    public PageResult<Spu> getSpuByPage(Integer pageNum, Integer pageSize, Boolean saleable, String key) {
-
-
+    public PageResult<Spu> querySpuByPage(Integer pageNum, Integer pageSize, Boolean saleable, String key) {
         //过滤
         Example example = new Example(Spu.class);
         Example.Criteria criteria = example.createCriteria();
-
         //搜索字段过滤
         if (StringUtils.isNotBlank(key)) {
             criteria.andLike("title", "%" + key + "%");
         }
-
         //是否上架过滤
         if (saleable != null) {
             criteria.andEqualTo("saleable", saleable);
@@ -87,7 +96,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-    *
+    * 新增商品
     * @Param [spu]
     * @return
     */
@@ -95,7 +104,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     public void addGoods(Spu spu) {
         //新增spu
-//        spu.setId(null);
+        spu.setId(null);
         spu.setCreateTime(new Date());
         spu.setLastUpdateTime(spu.getCreateTime());
         spu.setSaleable(true);
@@ -148,6 +157,7 @@ public class GoodsServiceImpl implements GoodsService {
             Stock stock = new Stock();
             stock.setSkuId(sku.getId());
             stock.setStock(sku.getStock());
+
             stockList.add(stock);
 //            count = stockMapper.insert(stock);
 //            if (count != 1) {
@@ -156,15 +166,20 @@ public class GoodsServiceImpl implements GoodsService {
             //新增的逻辑放在for循环里不太好，用批处理比较好
         }
 
-        //批量新增库存
+        //批量新增库存  批量新增不会返回id，所以我们这里只对库存进行批量新增
         count = stockMapper.insertList(stockList);
         if (count != stockList.size()) {
             throw new TkException(ExceptionEnum.GOOD_SAVE_ERROR);
         }
     }
 
+    /** 
+    * 根据Spu的id查询商品详情detail
+    * @Param [spuId] 
+    * @return 
+    */
     @Override
-    public SpuDetail getSpuDetailById(Long spuId) {
+    public SpuDetail querySpuDetailById(Long spuId) {
         SpuDetail spuDetail = spuDetailMapper.selectByPrimaryKey(spuId);
         if (null == spuDetail) {
             throw new TkException(ExceptionEnum.GOOD_DETAIL_ERROR);
@@ -172,8 +187,13 @@ public class GoodsServiceImpl implements GoodsService {
         return spuDetail;
     }
 
+    /** 
+    * 根据spuId查询spu下面所有的sku 
+    * @Param [spuId] 
+    * @return 
+    */
     @Override
-    public List<Sku> getSkuListBySpuId(Long spuId) {
+    public List<Sku> querySkuBySpuId(Long spuId) {
         Sku sku = new Sku();
         sku.setSpuId(spuId);
         List<Sku> skuList = skuMapper.select(sku);
@@ -193,17 +213,23 @@ public class GoodsServiceImpl implements GoodsService {
         return skuList;
     }
 
+    /**
+    * 修改商品
+    * @Param [spu]
+    * @return
+    */
     @Override
     @Transactional
-    public void updateGoods(Spu spu) {
+    public void modifyGoods(Spu spu) {
         if (spu.getId() == null) {
             throw new TkException(ExceptionEnum.GOOD_ID_ERROR);
         }
         Sku sku = new Sku();
         sku.setSpuId(spu.getId());
+        //查询以前的sku
         List<Sku> skuList = skuMapper.select(sku);
-        if (org.apache.commons.collections.CollectionUtils.isNotEmpty(skuList)) {
-            //删除SKU
+        if (!CollectionUtils.isEmpty(skuList)) {
+            //存在则删除SKU
             int count = skuMapper.delete(sku);
             if (count != skuList.size()) {
                 throw new TkException(ExceptionEnum.GOOD_UPDATE_ERROR);
@@ -225,6 +251,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         //修改detail
         SpuDetail spuDetail = spu.getSpuDetail();
+        spuDetailMapper.updateByPrimaryKeySelective(spuDetail);
         count = spuDetailMapper.updateByPrimaryKeySelective(spuDetail);
         if (count != 1) {
             throw new TkException(ExceptionEnum.GOOD_UPDATE_ERROR);
@@ -276,11 +303,11 @@ public class GoodsServiceImpl implements GoodsService {
         }
 
         //查询sku
-        List<Sku> skuList = getSkuListBySpuId(id);
+        List<Sku> skuList = querySkuBySpuId(id);
         spu.setSkus(skuList);
 
         //查询detail
-        SpuDetail spuDetail = getSpuDetailById(id);
+        SpuDetail spuDetail = querySpuDetailById(id);
         spu.setSpuDetail(spuDetail);
 
         return spu;
@@ -318,19 +345,21 @@ public class GoodsServiceImpl implements GoodsService {
         for (Spu spu : spuList) {
             //处理分类名称
             List<Long> idList = Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3());
-            List<Category> categoryList = categoryMapper.selectByIdList(idList);
-            if (CollectionUtils.isEmpty(categoryList)) {
-                throw new TkException(ExceptionEnum.CATEGORY_NOT_FOUND);
-            }
+//            List<Category> categoryList = categoryMapper.selectByIdList(idList);
+//            if (CollectionUtils.isEmpty(categoryList)) {
+//                throw new TkException(ExceptionEnum.CATEGORY_NOT_FOUND);
+//            }
+            List<Category> categoryList = categoryService.queryCategoryByIds(idList);
             List<String> nameList = categoryList.stream().map(Category::getName).collect(Collectors.toList());
             spu.setCname(StringUtils.join(nameList,"/"));
 
             //处理品牌名称
             Long brandId = spu.getBrandId();
-            Brand brand = brandMapper.selectByPrimaryKey(brandId);
-            if (null == brand) {
-                throw new TkException(ExceptionEnum.BRAND_NOT_FOUND);
-            }
+//            Brand brand = brandMapper.selectByPrimaryKey(brandId);
+//            if (null == brand) {
+//                throw new TkException(ExceptionEnum.BRAND_NOT_FOUND);
+//            }
+            Brand brand = brandService.queryBrandById(brandId);
             spu.setBname(brand.getName());
         }
     }

@@ -7,6 +7,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:10086/eureka
+#    register-with-eureka: false 这两个如果开启，网关不注册到注册中心
+#    fetch-registry: false
 zuul:
   prefix: /api # 添加路由前缀
   routes:
@@ -33,15 +35,16 @@ ribbon:
   ReadTimeout: 3500 # ribbon读取超时时间(ms)
   MaxAutoRetriesNextServer: 0 # 切换服务重试次数
   MaxAutoRetries: 0 # 当前服务重试次数
-tk:
-  jwt:
-    pubKeyPath: D:\tmp\rsa\rsa.pub #公钥地址
-    cookieName: TK_TOKEN
-  filer:
-    allowPaths:
-      - /api/auth
-      - /api/search
-      - /api/user/register
-      - /api/user/check
-      - /api/user/code
-      - /api/item
+
+#tk:
+#  jwt:
+#    pubKeyPath: D:\tmp\rsa\rsa.pub #公钥地址
+#    cookieName: TK_TOKEN
+#  filer:
+#    allowPaths:
+#      - /api/auth
+#      - /api/search
+#      - /api/user/register
+#      - /api/user/check
+#      - /api/user/code
+#      - /api/item

@@ -31,12 +31,12 @@ public class SpecificationServiceImpl implements SpecificationService {
     private SpecParamMapper specParamMapper;
 
     /**
-    * 根据分类id查询分组
+    * 根据分类id查询规格组
     * @Param [cid]
     * @return
     */
     @Override
-    public List<SpecGroup> getSpecGroupsByCid(Long cid) {
+    public List<SpecGroup> querySpecGroupsByCid(Long cid) {
         SpecGroup specGroup = new SpecGroup();
         specGroup.setCid(cid);
         List<SpecGroup> list = specGroupMapper.select(specGroup);
@@ -52,7 +52,7 @@ public class SpecificationServiceImpl implements SpecificationService {
     * @return
     */
     @Override
-    public List<SpecParam> getSpecParam(Long gid, Long cid, Boolean searching) {
+    public List<SpecParam> querySpecParamInfo(Long gid, Long cid, Boolean searching) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(gid);
         specParam.setCid(cid);
@@ -67,9 +67,9 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public List<SpecGroup> querySpecsByCid(Long cid) {
         //查询规格组
-        List<SpecGroup> specGroupList = getSpecGroupsByCid(cid);
+        List<SpecGroup> specGroupList = querySpecGroupsByCid(cid);
         //查询当前分类下的参数
-        List<SpecParam> specParamList = getSpecParam(null, cid, null);
+        List<SpecParam> specParamList = querySpecParamInfo(null, cid, null);
         //先把规格参数变为map，map的key是规格组id，map的值是组下的所有参数
         Map<Long, List<SpecParam>> map = new HashMap<>();
         for (SpecParam param : specParamList) {

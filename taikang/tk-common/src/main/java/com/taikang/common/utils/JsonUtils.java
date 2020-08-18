@@ -21,8 +21,7 @@ public class JsonUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
-    @Nullable
-    public static String serialize(Object obj) {
+    public static String toString(Object obj) {
         if (obj == null) {
             return null;
         }
@@ -37,8 +36,7 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
-    public static <T> T parse(String json, Class<T> tClass) {
+    public static <T> T toBean(String json, Class<T> tClass) {
         try {
             return mapper.readValue(json, tClass);
         } catch (IOException e) {
@@ -47,8 +45,7 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
-    public static <E> List<E> parseList(String json, Class<E> eClass) {
+    public static <E> List<E> toList(String json, Class<E> eClass) {
         try {
             return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, eClass));
         } catch (IOException e) {
@@ -57,8 +54,7 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
-    public static <K, V> Map<K, V> parseMap(String json, Class<K> kClass, Class<V> vClass) {
+    public static <K, V> Map<K, V> toMap(String json, Class<K> kClass, Class<V> vClass) {
         try {
             return mapper.readValue(json, mapper.getTypeFactory().constructMapType(Map.class, kClass, vClass));
         } catch (IOException e) {
@@ -67,7 +63,6 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
     public static <T> T nativeRead(String json, TypeReference<T> type) {
         try {
             return mapper.readValue(json, type);
@@ -118,24 +113,24 @@ public class JsonUtils {
 
 //    public static void main(String[] args) {
 //        User user = new User("曹锐群", 25);
-        //serialize---toString
-//        String json = serialize(user);
+        //toString---toString
+//        String json = toString(user);
 //        System.out.println("json = "+json);   //json = {"name":"曹锐群","age":25} json字符串数组
 
-        //parse---toBean 反序列化
-//        User user1 = parse(json, User.class);
+        //toBean---toBean 反序列化
+//        User user1 = toBean(json, User.class);
 //        System.out.println("user1 = " + user1); //user1 = User{name='曹锐群', age=25}
 
-        //parseList---toList
+        //toList---toList
 //        String json2 = "[20,-10,5,15]";
-//        List<Integer> integerList = parseList(json2, Integer.class);
+//        List<Integer> integerList = toList(json2, Integer.class);
 //        System.out.println("integerList = " + integerList); //integerList = [20, -10, 5, 15]
 
-        //parseMap---toMap
+        //toMap---toMap
         //language=JSON
 //        String json3 = "{\"name\": \"小美人\",\"age\": \"20\"}";
-//        Map<String, String> parseMap = parseMap(json3, String.class, String.class);
-//        System.out.println("parseMap = " + parseMap);   //parseMap = {name=小美人, age=20}
+//        Map<String, String> toMap = toMap(json3, String.class, String.class);
+//        System.out.println("toMap = " + toMap);   //toMap = {name=小美人, age=20}
 
         //nativeRead list里面装map 复杂类型
 //        String json4 = "[{\"name\": \"小美人\",\"age\": \"20\"},{\"name\": \"大美人\",\"age\": \"30\"}]";

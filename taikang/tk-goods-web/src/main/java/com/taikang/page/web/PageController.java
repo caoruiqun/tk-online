@@ -29,7 +29,7 @@ public class PageController {
      * @return
      */
     @GetMapping("/{id}.html")
-    public String toItemPage(Model model, @PathVariable("id")Long spuId){
+    public String toItemPage(Model model, @PathVariable("id") Long spuId){
         //查询模型数据
         Map<String, Object> modelMap = pageService.loadModel(spuId);
         //准备模型数据

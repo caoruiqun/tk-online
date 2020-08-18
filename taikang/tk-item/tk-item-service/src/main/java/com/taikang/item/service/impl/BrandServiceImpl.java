@@ -34,11 +34,15 @@ public class BrandServiceImpl implements BrandService {
      * @return:
      */
     @Override
-//    public Page<Brand> getBrandListByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key) {
-    public PageResult<Brand> getBrandListByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key) {
+//    public Page<Brand> queryBrandByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key) {
+    public PageResult<Brand> queryBrandByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key) {
         //分页
         PageHelper.startPage(pageNum, pageSize);
         //过滤
+        /**
+         * where name like "%x%" or letter=="x"
+         * order by id desc
+         */
         Example example = new Example(Brand.class);
         if (StringUtils.isNotBlank(key)) {
             //过滤条件
@@ -75,6 +79,11 @@ public class BrandServiceImpl implements BrandService {
         return brandList;
     }
 
+    /**
+    * 根据品牌id查询品牌
+    * @Param [id]
+    * @return
+    */
     @Override
     public Brand queryBrandById(Long id) {
         Brand brand = brandMapper.selectByPrimaryKey(id);

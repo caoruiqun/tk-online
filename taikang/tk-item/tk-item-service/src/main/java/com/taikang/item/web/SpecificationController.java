@@ -22,26 +22,26 @@ public class SpecificationController {
     private SpecificationService specificationService;
 
     /** 
-    * 根据分类id查询分组
+    * 根据分类id查询规格组
     * @Param [cid] 
     * @return 
     */
 //    http://api.leyou.com/api/item/spec/groups/76
     @GetMapping("/groups/{cid}")
-    public ResponseEntity<List<SpecGroup>> getSpecGroupsByCid(@PathVariable("cid") Long cid) {
-        List<SpecGroup> specGroupList = specificationService.getSpecGroupsByCid(cid);
+    public ResponseEntity<List<SpecGroup>> querySpecGroupsByCid(@PathVariable("cid") Long cid) {
+        List<SpecGroup> specGroupList = specificationService.querySpecGroupsByCid(cid);
         return ResponseEntity.ok(specGroupList);
     }
 
     /** 
-    * 根据条件查询规格参数
+    * 根据组id查询规格参数
     * @Param [gid] 
     * @return 
     */
-//    http://api.leyou.com/api/item/spec/params?gid=1
+////    http://api.leyou.com/api/item/spec/params?gid=1
 //    @GetMapping("/params")
-//    public ResponseEntity<List<SpecParam>> getSpecParam(@RequestParam("gid") Long gid) {
-//        List<SpecParam> specParamList = specificationService.getSpecParam(gid);
+//    public ResponseEntity<List<SpecParam>> querySpecParamInfo(@RequestParam("gid") Long gid) {
+//        List<SpecParam> specParamList = specificationService.querySpecParamInfo(gid);
 //        return ResponseEntity.ok(specParamList);
 //    }
 
@@ -52,10 +52,10 @@ public class SpecificationController {
     * @return
     */
     @GetMapping("/params")
-    public ResponseEntity<List<SpecParam>> getSpecParam(@RequestParam(value = "gid",required = false) Long gid,
-                                                        @RequestParam(value = "cid",required = false) Long cid,
-                                                        @RequestParam(value = "searching",required = false) Boolean searching) {
-        List<SpecParam> specParamList = specificationService.getSpecParam(gid,cid,searching);
+    public ResponseEntity<List<SpecParam>> querySpecParamInfo(@RequestParam(value = "gid",required = false) Long gid,
+                                                              @RequestParam(value = "cid",required = false) Long cid,
+                                                              @RequestParam(value = "searching",required = false) Boolean searching) {
+        List<SpecParam> specParamList = specificationService.querySpecParamInfo(gid,cid,searching);
         return ResponseEntity.ok(specParamList);
     }
 
@@ -66,7 +66,7 @@ public class SpecificationController {
     * @return
     */
     @GetMapping("/group")
-    public ResponseEntity<List<SpecGroup>> querySpecsByCid(@RequestParam("cid") Long cid) {
+    public ResponseEntity<List<SpecGroup>> queryGroupByCid(@RequestParam("cid") Long cid) {
         List<SpecGroup> specGroupList = specificationService.querySpecsByCid(cid);
         return ResponseEntity.ok(specGroupList);
     }

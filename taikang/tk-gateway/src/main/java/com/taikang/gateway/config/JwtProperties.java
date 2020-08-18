@@ -66,14 +66,14 @@ public class JwtProperties {
     /**
      * @PostConstruct :在构造方法执行之后执行该方法
      */
-    @PostConstruct
-    public void init(){
-        try {
-            // 获取公钥
-            this.publicKey = RsaUtils.getPublicKey(pubKeyPath);
-        } catch (Exception e) {
-            logger.error("获取公钥失败！", e);
-            throw new RuntimeException();
-        }
-    }
+//    @PostConstruct
+//    public void init(){
+//        try {
+//            // 获取公钥
+//            this.publicKey = RsaUtils.getPublicKey(pubKeyPath);
+//        } catch (Exception e) {
+//            logger.error("获取公钥失败！", e);
+//            throw new RuntimeException();
+//        }
+//    }
 }

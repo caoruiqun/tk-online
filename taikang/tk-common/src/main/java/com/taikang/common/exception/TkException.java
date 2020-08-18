@@ -21,4 +21,5 @@ public class TkException extends RuntimeException {
     public ExceptionEnum getExceptionEnum() {
         return exceptionEnum;
     }
+
 }

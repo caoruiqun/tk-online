@@ -20,10 +20,10 @@ public class CommonExceptionHandler {
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 //    }
 
-
     @ExceptionHandler(TkException.class)
     public ResponseEntity<ExceptionResult> handlerException(TkException e) {
         ExceptionEnum em = e.getExceptionEnum();
         return ResponseEntity.status(em.getCode()).body(new ExceptionResult(em));
     }
+
 }

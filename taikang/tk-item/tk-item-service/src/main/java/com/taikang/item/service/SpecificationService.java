@@ -9,9 +9,9 @@ import java.util.List;
  * @author CaoRuiqun on 2020/4/13
  */
 public interface SpecificationService {
-    List<SpecGroup> getSpecGroupsByCid(Long cid);
+    List<SpecGroup> querySpecGroupsByCid(Long cid);
 
-    List<SpecParam> getSpecParam(Long gid, Long cid, Boolean searching);
+    List<SpecParam> querySpecParamInfo(Long gid, Long cid, Boolean searching);
 
     List<SpecGroup> querySpecsByCid(Long cid);
 }

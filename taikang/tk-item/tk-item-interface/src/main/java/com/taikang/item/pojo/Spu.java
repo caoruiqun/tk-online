@@ -1,5 +1,6 @@
 package com.taikang.item.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
@@ -45,6 +46,7 @@ public class Spu {
     /**
      * 是否有效，逻辑删除使用
      */
+    @JsonIgnore
     private Boolean valid;
     /**
      * 创建时间
@@ -53,6 +55,7 @@ public class Spu {
     /**
      * 最后修改时间
      */
+    @JsonIgnore
     private Date lastUpdateTime;
 
     @Transient

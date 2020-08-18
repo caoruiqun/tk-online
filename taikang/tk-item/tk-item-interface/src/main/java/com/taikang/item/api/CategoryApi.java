@@ -11,6 +11,12 @@ import java.util.List;
  */
 public interface CategoryApi {
 
+    /**
+     * 根据分类id集合查询分类名称
+     *
+     * @param ids
+     * @return
+     */
     @GetMapping("/category/list/ids")
     List<Category> queryCategoryByIds(@RequestParam("ids") List<Long> ids);
 

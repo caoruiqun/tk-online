@@ -18,10 +18,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class TkGoodWebApplication {
+public class TkGoodPageApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TkGoodWebApplication.class,args);
+        SpringApplication.run(TkGoodPageApplication.class,args);
     }
 
 }

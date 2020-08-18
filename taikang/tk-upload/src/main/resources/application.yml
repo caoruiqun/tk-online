@@ -15,8 +15,8 @@ eureka:
     prefer-ip-address: true
     ip-address: 127.0.0.1
 fdfs:
-  so-timeout: 2501
-  connect-timeout: 601
+  so-timeout: 2500
+  connect-timeout: 600
   thumb-image: # 缩略图
     width: 60
     height: 60

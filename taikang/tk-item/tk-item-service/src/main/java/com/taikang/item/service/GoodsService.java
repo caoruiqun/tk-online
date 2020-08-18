@@ -11,15 +11,15 @@ import java.util.List;
  * @author CaoRuiqun on 2020/4/13
  */
 public interface GoodsService {
-    PageResult<Spu> getSpuByPage(Integer pageNum, Integer pageSize, Boolean saleable, String key);
+    PageResult<Spu> querySpuByPage(Integer pageNum, Integer pageSize, Boolean saleable, String key);
 
     void addGoods(Spu spu);
 
-    SpuDetail getSpuDetailById(Long spuId);
+    SpuDetail querySpuDetailById(Long spuId);
 
-    List<Sku> getSkuListBySpuId(Long spuId);
+    List<Sku> querySkuBySpuId(Long spuId);
 
-    void updateGoods(Spu spu);
+    void modifyGoods(Spu spu);
 
     Spu querySpuById(Long id);
 

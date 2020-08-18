@@ -9,11 +9,11 @@ import java.util.List;
  * @author CaoRuiqun on 2020/3/14
  */
 public interface BrandService {
-//    Page<Brand> getBrandListByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key);
+//    Page<Brand> queryBrandByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key);
 
     void addBrand(Brand brand, List<Long> cid);
 
-    PageResult<Brand> getBrandListByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key);
+    PageResult<Brand> queryBrandByPage(Integer pageNum, Integer pageSize, String orderBy, Boolean desc, String key);
 
     List<Brand> getBrandbyCid(Long cid);
 

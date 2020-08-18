@@ -50,7 +50,7 @@ public class SmsListener {
         if (StringUtils.isNotBlank(phone) && StringUtils.isNotBlank(code)){
             //发送消息
             try {
-                SendSmsResponse response = this.smsUtils.sendSms(phone,smsProperties.getSignName(), smsProperties.getVerifyCodeTemplate(), JsonUtils.serialize(code));
+                SendSmsResponse response = this.smsUtils.sendSms(phone,smsProperties.getSignName(), smsProperties.getVerifyCodeTemplate(), JsonUtils.toString(code));
             }catch (ClientException e){
                 return;
             }

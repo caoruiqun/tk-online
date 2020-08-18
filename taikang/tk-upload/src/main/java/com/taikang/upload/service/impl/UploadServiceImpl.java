@@ -66,7 +66,7 @@ public class UploadServiceImpl implements UploadService {
             String extension = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
 //            String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
             // 2.2、上传
-            StorePath storePath = this.storageClient.uploadFile(file.getInputStream(), file.getSize(), extension, null);
+            StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(), extension, null);
             //返回文件路径
             return uploadProperties.getBaseUrl() + storePath.getFullPath();
         } catch (IOException e) {
@@ -77,4 +77,5 @@ public class UploadServiceImpl implements UploadService {
             throw new TkException(ExceptionEnum.FILE_UPLOAD_ERROR);
         }
     }
+
 }

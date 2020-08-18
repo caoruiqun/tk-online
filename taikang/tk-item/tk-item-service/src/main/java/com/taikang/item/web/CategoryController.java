@@ -48,4 +48,5 @@ public class CategoryController {
         List<Category> list = categoryService.queryCategoryByIds(ids);
         return ResponseEntity.ok(list);
     }
+
 }

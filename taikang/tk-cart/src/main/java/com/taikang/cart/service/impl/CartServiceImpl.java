@@ -17,7 +17,6 @@ import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,7 +63,7 @@ public class CartServiceImpl implements CartService {
         if (result){
             //5.存在，获取购物车数据
             String json = hashOperations.get(skuId.toString()).toString();
-            cart = JsonUtils.parse(json,Cart.class);
+            cart = JsonUtils.toBean(json,Cart.class);
             //6.修改购物车数量
             cart.setNum(cart.getNum() + num);
         }else{
@@ -78,7 +77,7 @@ public class CartServiceImpl implements CartService {
             cart.setOwnSpec(sku.getOwnSpec());
         }
         //9.将购物车数据写入redis
-        hashOperations.put(cart.getSkuId().toString(),JsonUtils.serialize(cart));
+        hashOperations.put(cart.getSkuId().toString(),JsonUtils.toString(cart));
     }
 
     /**
@@ -103,7 +102,7 @@ public class CartServiceImpl implements CartService {
 //            return null;
 //        }
         //5.查询购物车数据
-        return carts.stream().map( o -> JsonUtils.parse(o.toString(),Cart.class)).collect(Collectors.toList());
+        return carts.stream().map( o -> JsonUtils.toBean(o.toString(),Cart.class)).collect(Collectors.toList());
     }
 
     /**
@@ -119,10 +118,10 @@ public class CartServiceImpl implements CartService {
         BoundHashOperations<String,Object,Object> hashOperations = this.stringRedisTemplate.boundHashOps(key);
         //2.获取购物车
         String json = hashOperations.get(skuId.toString()).toString();
-        Cart cart = JsonUtils.parse(json,Cart.class);
+        Cart cart = JsonUtils.toBean(json,Cart.class);
         cart.setNum(num);
         //3.写入购物车
-        hashOperations.put(skuId.toString(),JsonUtils.serialize(cart));
+        hashOperations.put(skuId.toString(),JsonUtils.toString(cart));
     }
 
     /**
