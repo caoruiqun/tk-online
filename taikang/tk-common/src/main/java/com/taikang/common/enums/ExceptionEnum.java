@@ -23,7 +23,9 @@ public enum ExceptionEnum {
     CART_NOT_FUND(404,"购物车不存在！"),
     ORDER_NOT_FOUND(404,"订单不存在！"),
     ORDER_DETAIL_NOT_FOUND(404,"订单详情不存在！"),
-    ORDER_STATUS_NOT_FOUND(404,"订单状态不存在！")
+    ORDER_STATUS_NOT_FOUND(404,"订单状态不存在！"),
+    INVAILD_USER_DATA_TYPE(400,"用户数据类型无效！"),
+    INVAILD_VERIFY_CODE(400,"无效的验证码！")
     ;
 
     private Integer code;

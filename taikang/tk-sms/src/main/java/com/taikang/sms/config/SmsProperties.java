@@ -1,28 +1,31 @@
 package com.taikang.sms.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author: 98050
  * @Time: 2018-10-22 18:34
  * @Feature: 短信服务实体类
  */
-//@ConfigurationProperties(prefix = "tk.sms")
-@Configuration
+@Component
+@ConfigurationProperties(prefix = "tk.sms")
+//@Configuration
 //@RefreshScope
 public class SmsProperties {
 
-    @Value("${taikang.sms.accessKeyId}")
+//    @Value("${taikang.sms.accessKeyId}")
     private String accessKeyId;
 
-    @Value("${taikang.sms.accessKeySecret}")
+//    @Value("${taikang.sms.accessKeySecret}")
     private String accessKeySecret;
 
-    @Value("${taikang.sms.signName}")
+//    @Value("${taikang.sms.signName}")
     private String signName;
 
-    @Value("${taikang.sms.verifyCodeTemplate}")
+//    @Value("${taikang.sms.verifyCodeTemplate}")
     private String verifyCodeTemplate;
 
     public String getAccessKeyId() {

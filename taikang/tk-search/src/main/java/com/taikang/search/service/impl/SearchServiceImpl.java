@@ -191,10 +191,14 @@ public class SearchServiceImpl implements SearchService {
         //查询spu
         Spu spu = goodsClient.querySpuById(spuId);
         //构建goods
-//        Goods goods = buildGoods(spu);
+        Goods goods = buildGoods(spu);
         //存入索引库
-//        goodsRepository.save(goods);
+        goodsRepository.save(goods);
 
+    }
+
+    private Goods buildGoods(Spu spu) {
+        return null;
     }
 
     @Override

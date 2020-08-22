@@ -8,6 +8,8 @@ spring:
     username: taikang
     password: taikang
     virtual-host: /taikang
+  redis:
+    host: 127.0.0.1
 tk:
   sms:
     accessKeyId: LTAIf5vJTEe70iPa

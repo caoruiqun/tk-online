@@ -22,7 +22,7 @@ public class ItemListener {
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "search.item.insert.queue",durable = "true"),
-            exchange = @Exchange(value = "ly.item.exchange",type = ExchangeTypes.TOPIC),
+            exchange = @Exchange(value = "tk.item.exchange",type = ExchangeTypes.TOPIC),
             key = {"item.insert","item.update"}
     ))
     public void listenInsertOrUpdate(Long spuId) {
@@ -36,7 +36,7 @@ public class ItemListener {
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "search.item.delete.queue",durable = "true"),
-            exchange = @Exchange(value = "ly.item.exchange",type = ExchangeTypes.TOPIC),
+            exchange = @Exchange(value = "tk.item.exchange",type = ExchangeTypes.TOPIC),
             key = {"item.insert","item.update"}
     ))
     public void listenDelete(Long spuId) {

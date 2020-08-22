@@ -1,6 +1,8 @@
 package com.taikang.user.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +20,7 @@ import java.util.Date;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @KeySql(useGeneratedKeys = true)
     private Long id;
 
     /**
@@ -30,7 +32,7 @@ public class User {
     /**
      * 密码
      */
-    //@JsonIgnore
+    @JsonIgnore
     @Length(min = 6,max = 25,message = "密码只能在6~25位之间")
     private String password;
 
@@ -44,6 +46,12 @@ public class User {
      * 创建时间
      */
     private Date created;
+
+    /**
+     * 密码的盐值
+     */
+    @JsonIgnore
+    private String salt;
 
     public Long getId() {
         return id;
@@ -83,6 +91,14 @@ public class User {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override

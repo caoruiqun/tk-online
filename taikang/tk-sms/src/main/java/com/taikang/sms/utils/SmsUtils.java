@@ -49,11 +49,10 @@ public class SmsUtils {
      */
     static final String domain = "dysmsapi.aliyuncs.com";
 
-//    static final Logger logger = LoggerFactory.getLogger(SmsUtils.class);
+//    public SendSmsResponse sendSms(String phoneNumber, String signName, String templateCode,String templateParam) throws ClientException {
+    public SendSmsResponse sendSms(String phoneNumber, String signName, String templateCode,String templateParam) {
 
-    public SendSmsResponse sendSms(String phone, String signName, String template,String templateParam) throws ClientException {
-
-        String key = KEY_PREFIX + phone;
+        String key = KEY_PREFIX + phoneNumber;
 
         //todo 按照手机号码限流
         //读取时间
@@ -61,49 +60,59 @@ public class SmsUtils {
         if (StringUtils.isNotBlank(lastTime)) {
             Long last = Long.valueOf(lastTime);
             if (System.currentTimeMillis() - last < SMS_MIN_INTERAL_IN_MILLIS) {
-                log.info("[短信服务]发送短信频率过高，被拦截，手机号码：{}",phone);
+                log.info("[短信服务]发送短信频率过高，被拦截，手机号码：{}",phoneNumber);
                 return null;
             }
         }
 
-        //可自助调整超时时间
-        System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
-        System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+        try {
 
-        //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", properties.getAccessKeyId(), properties.getAccessKeySecret());
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
-        IAcsClient acsClient = new DefaultAcsClient(profile);
+            //可自助调整超时时间
+            System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+            System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
-        //组装请求对象-具体描述见控制台-文档部分内容
-        SendSmsRequest request = new SendSmsRequest();
-        request.setMethod(MethodType.POST);
-        //必填:待发送手机号
-        request.setPhoneNumbers(phone);
-        //必填:短信签名-可在短信控制台中找到
-        request.setSignName(signName);
-        //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode(template);
-        //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
+            //初始化acsClient,暂不支持region化
+            IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", properties.getAccessKeyId(), properties.getAccessKeySecret());
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            IAcsClient acsClient = new DefaultAcsClient(profile);
+
+            //组装请求对象-具体描述见控制台-文档部分内容
+            SendSmsRequest request = new SendSmsRequest();
+            request.setMethod(MethodType.POST);
+            //必填:待发送手机号
+            request.setPhoneNumbers(phoneNumber);
+            //必填:短信签名-可在短信控制台中找到
+            request.setSignName(signName);
+            //必填:短信模板-可在短信控制台中找到
+            request.setTemplateCode(templateCode);
+            //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
 //        request.setTemplateParam("{\"code\":\"" + code + "\"}");
-        request.setTemplateParam(templateParam);
+            request.setTemplateParam(templateParam);
 
-        //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
-        //request.setSmsUpExtendCode("90997");
+            //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
+            //request.setSmsUpExtendCode("90997");
 
-        //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-//        request.setOutId("123456");
+            //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
+            //request.setOutId("123456");
 
-        //hint 此处可能会抛出异常，注意catch
-        SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+            //hint 此处可能会抛出异常，注意catch
+            SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
 
-        if (!"OK".equals(sendSmsResponse.getCode())) {
-            log.info("[短信服务]发送短信失败，phone:{},原因：{}",phone,sendSmsResponse.getMessage());
+            if (!"OK".equals(sendSmsResponse.getCode())) {
+                log.info("[短信服务]发送短信失败，phoneNumber:{},原因：{}",phoneNumber,sendSmsResponse.getMessage());
+            }
+
+            //发送短信日志
+            log.info("[短信服务]发送短信验证码，手机号：{}",phoneNumber);
+
+            //发送短信成功后写入redis,指定生存时间
+            redisTemplate.opsForValue().set(key, String.valueOf(System.currentTimeMillis()),1, TimeUnit.MINUTES);
+
+            return sendSmsResponse;
+        } catch (Exception e) {
+            log.error("[短信服务]发送短信异常，手机号码:{}",phoneNumber,e);
+            return null;
         }
-
-        //发送短信成功后写入redis,指定生存时间
-        redisTemplate.opsForValue().set(key, String.valueOf(System.currentTimeMillis()),1, TimeUnit.MINUTES);
-
-        return sendSmsResponse;
     }
+
 }

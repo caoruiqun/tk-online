@@ -21,7 +21,7 @@ public interface UserService {
      * @param phone
      * @return
      */
-    Boolean sendVerifyCode(String phone);
+    void sendVerifyCode(String phone);
 
     /**
      * 用户注册
@@ -29,7 +29,7 @@ public interface UserService {
      * @param code
      * @return
      */
-    Boolean register(User user, String code);
+    void register(User user, String code);
 
     /**
      * 用户验证
@@ -37,7 +37,7 @@ public interface UserService {
      * @param password
      * @return
      */
-    User queryUser(String username, String password);
+//    User queryUser(String username, String password);
 
     /**
      * 根据用户名修改密码
@@ -45,5 +45,5 @@ public interface UserService {
      * @param newPassword
      * @return
      */
-    boolean updatePassword(String username, String oldPassword, String newPassword);
+//    boolean updatePassword(String username, String oldPassword, String newPassword);
 }

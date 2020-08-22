@@ -84,9 +84,9 @@ public class PageServiceImpl implements PageService {
         context.setVariables(loadModel(spuId));
         //输出流
         File dest = new File("D:\\zzzz", spuId + ".html");
-//        if (dest.exists()) {
-//            dest.delete();
-//        }
+        if (dest.exists()) {
+            dest.delete();
+        }
         try (PrintWriter writer = new PrintWriter(dest,"UTF-8")){
             //生成 HTML
             templateEngine.process("item", context, writer);

@@ -1,4 +1,4 @@
-package com.taikang.user;
+package com.taikang;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.taikang.user.mapper")
+//@MapperScan("com.taikang.user.mapper")
 public class TkUserApplication {
     public static void main(String[] args) {
         SpringApplication.run(TkUserApplication.class,args);

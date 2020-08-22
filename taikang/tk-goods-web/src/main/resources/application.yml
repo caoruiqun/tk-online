@@ -5,6 +5,11 @@ spring:
     name: goods-page-service
   thymeleaf:
     cache: false
+  rabbitmq:
+    host: 127.0.0.1
+    username: taikang
+    password: taikang
+    virtual-host: /taikang
 eureka:
   client:
     service-url:
