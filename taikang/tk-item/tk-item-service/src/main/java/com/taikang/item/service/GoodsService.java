@@ -23,7 +23,7 @@ public interface GoodsService {
 
     Spu querySpuById(Long id);
 
-    List<Sku> getSkuListByIds(List<Long> ids);
+    List<Sku> querySkuBySpuId(List<Long> ids);
 
     Sku querySkuById(Long id);
 }

@@ -32,12 +32,12 @@ public interface UserService {
     void register(User user, String code);
 
     /**
-     * 用户验证
+     * 用户验证 根据用户名和密码查询用户
      * @param username
      * @param password
      * @return
      */
-//    User queryUser(String username, String password);
+    User queryUserByUserNameAndPassword(String username, String password);
 
     /**
      * 根据用户名修改密码

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,17 +55,18 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //1.查询token
         String token = CookieUtils.getCookieValue(request,jwtProperties.getCookieName());
-        if (StringUtils.isBlank(token)){
-            //2.未登录，返回401
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            return false;
-        }
+//        if (StringUtils.isBlank(token)){
+//            //2.未登录，返回401
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            return false;
+//        }
         //3.有token，查询用户信息
         try{
             //4.解析成功，说明已经登录
             UserInfo userInfo = JwtUtils.getInfoFromToken(token,jwtProperties.getPublicKey());
             //5.放入线程域
             t1.set(userInfo);
+            //放行
             return true;
         }catch (Exception e){
             //6.抛出异常，证明未登录，返回401
@@ -106,6 +108,5 @@ public class UserInterceptor implements HandlerInterceptor {
     public static UserInfo getLoginUser(){
         return t1.get();
     }
-
 
 }

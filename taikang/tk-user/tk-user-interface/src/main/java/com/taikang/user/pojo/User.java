@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class User {
     /**
      * 用户名
      */
+    @NotEmpty(message = "用户名不能为空")
     @Length(min = 4,max = 15,message = "用户名只能在4~15位之间")
     private String username;
 
@@ -33,7 +35,7 @@ public class User {
      * 密码
      */
     @JsonIgnore
-    @Length(min = 6,max = 25,message = "密码只能在6~25位之间")
+    @Length(min = 6,max = 32,message = "密码只能在6~32位之间")
     private String password;
 
     /**

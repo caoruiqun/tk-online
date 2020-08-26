@@ -2,6 +2,7 @@ package com.taikang.user.service.impl;
 
 import com.taikang.common.enums.ExceptionEnum;
 import com.taikang.common.exception.TkException;
+import com.taikang.common.utils.JsonUtils;
 import com.taikang.common.utils.NumberUtils;
 import com.taikang.user.mapper.UserMapper;
 import com.taikang.user.pojo.User;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
-    private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserMapper userMapper;
@@ -106,24 +106,27 @@ public class UserServiceImpl implements UserService {
 //        user.setId(null);
         user.setCreated(new Date());
         int count = userMapper.insertSelective(user);
-        //4.如果注册成功，则删掉redis中的code
-        if (count==1){
-            try{
-                redisTemplate.delete(KEY_PREFIX + user.getPhone());
-            }catch (Exception e){
-                logger.error("删除缓存验证码失败，code:{}",code,e);
-            }
+        if (count != 1) {
+            throw new TkException(ExceptionEnum.REGISTRY_FAILED);
         }
+        //4.如果注册成功，则删掉redis中的code
+//        if (count==1){
+//            try{
+//                redisTemplate.delete(KEY_PREFIX + user.getPhone());
+//            }catch (Exception e){
+//                logger.error("删除缓存验证码失败，code:{}",code,e);
+//            }
+//        }
     }
 
-//    /**
-//     * 用户验证
-//     * @param username
-//     * @param password
-//     * @return
-//     */
-//    @Override
-//    public User queryUser(String username, String password) {
+    /**
+     * 用户验证 根据用户名和密码查询用户
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    public User queryUserByUserNameAndPassword(String username, String password) {
 //        /**
 //         * 逻辑改变，先去缓存中查询用户数据，查到的话直接返回，查不到再去数据库中查询，然后放入到缓存当中
 //         */
@@ -135,27 +138,44 @@ public class UserServiceImpl implements UserService {
 //            //在缓存中没有查到，去数据库查,查到放入缓存当中
 //            User record = new User();
 //            record.setUsername(username);
-//            user = this.userMapper.selectOne(record);
+//            user = userMapper.selectOne(record);
+//
+//            //校验
+//            if (null == user) {
+//                throw new TkException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+//            }
+//
+//            //校验密码
+//            String pass = CodecUtils.md5Hex(password, user.getSalt());
+//            if (!StringUtils.equals(user.getPassword(), pass)) {
+//                throw new TkException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+//            }
+//
 //            hashOperations.put(user.getUsername(), JsonUtils.toString(user));
 //        } else {
 //            user =  JsonUtils.toBean(userStr,User.class);
 //        }
-//
-//
-//        //2.校验用户名
-//        if (user == null){
-//            return null;
-//        }
-//        //3. 校验密码
-//        boolean result = CodecUtils.passwordConfirm(username + password,user.getPassword());
-//        if (!result){
-//            return null;
-//        }
-//
-//        //4.用户名密码都正确
-//        return user;
-//    }
-//
+
+        //查询用户
+        User record = new User();
+        record.setUsername(username);
+        User user = userMapper.selectOne(record);
+
+        //校验
+        if (null == user) {
+            throw new TkException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+        }
+
+        //校验密码
+        String pass = CodecUtils.md5Hex(password, user.getSalt());
+        if (!StringUtils.equals(user.getPassword(), pass)) {
+            throw new TkException(ExceptionEnum.INVALID_USERNAME_PASSWORD);
+        }
+
+        //用户名和密码都正确
+        return user;
+    }
+
 //    /**
 //     * 根据用户名修改密码
 //     * @param username

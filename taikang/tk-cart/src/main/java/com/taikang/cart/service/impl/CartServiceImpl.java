@@ -30,15 +30,15 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private StringRedisTemplate redisTemplate;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
-    @Autowired
-    private GoodsClient goodsClient;
+//    @Autowired
+//    private GoodsClient goodsClient;
 
-    private static String KEY_PREFIX = "taikang:cart:uid:";
+    private static String KEY_PREFIX = "cart:uid:";
 
     private final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
@@ -48,34 +48,33 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void addCart(Cart cart) {
-
-
-        //1.获取用户
+        //1.获取登录用户
         UserInfo userInfo = UserInterceptor.getLoginUser();
         //2.Redis的key
         String key = KEY_PREFIX + userInfo.getId();
         //3.获取hash操作对象
-        BoundHashOperations<String,Object,Object> hashOperations = this.stringRedisTemplate.boundHashOps(key);
-        //4.查询是否存在
-        Long skuId = cart.getSkuId();
+        BoundHashOperations<String,Object,Object> hashOperations = redisTemplate.boundHashOps(key);
+        //4.查询是否存在 判断当前购物车商品是否存在
+        Long hashKey = cart.getSkuId();
         Integer num = cart.getNum();
-        Boolean result = hashOperations.hasKey(skuId.toString());
+        Boolean result = hashOperations.hasKey(hashKey.toString());
         if (result){
             //5.存在，获取购物车数据
-            String json = hashOperations.get(skuId.toString()).toString();
+            String json = hashOperations.get(hashKey.toString()).toString();
             cart = JsonUtils.toBean(json,Cart.class);
             //6.修改购物车数量
             cart.setNum(cart.getNum() + num);
-        }else{
-            //7.不存在，新增购物车数据
-            cart.setUserId(userInfo.getId());
-            //8.其他商品信息，需要查询商品微服务
-            Sku sku = this.goodsClient.querySkuById(skuId);
-            cart.setImage(StringUtils.isBlank(sku.getImages()) ? "" : StringUtils.split(sku.getImages(),",")[0]);
-            cart.setPrice(sku.getPrice());
-            cart.setTitle(sku.getTitle());
-            cart.setOwnSpec(sku.getOwnSpec());
         }
+//        else{
+//            //7.不存在，新增购物车数据
+//            cart.setUserId(userInfo.getId());
+//            //8.其他商品信息，需要查询商品微服务
+//            Sku sku = this.goodsClient.querySkuById(hashKey);
+//            cart.setImage(StringUtils.isBlank(sku.getImages()) ? "" : StringUtils.split(sku.getImages(),",")[0]);
+//            cart.setPrice(sku.getPrice());
+//            cart.setTitle(sku.getTitle());
+//            cart.setOwnSpec(sku.getOwnSpec());
+//        }
         //9.将购物车数据写入redis
         hashOperations.put(cart.getSkuId().toString(),JsonUtils.toString(cart));
     }
@@ -90,19 +89,20 @@ public class CartServiceImpl implements CartService {
         UserInfo userInfo = UserInterceptor.getLoginUser();
         //2.判断是否存在购物车
         String key = KEY_PREFIX + userInfo.getId();
-        if (!this.stringRedisTemplate.hasKey(key)) {
+        if (!redisTemplate.hasKey(key)) {
             //3.不存在直接返回
 //            return null;
             throw new TkException(ExceptionEnum.CART_NOT_FUND);
         }
-        BoundHashOperations<String,Object,Object> hashOperations = this.stringRedisTemplate.boundHashOps(key);
-        List<Object> carts = hashOperations.values();
+        //获取用户所有购物车数据
+        BoundHashOperations<String,Object,Object> hashOperations = redisTemplate.boundHashOps(key);
+        List<Object> values = hashOperations.values();
         //4.判断是否有数据
 //        if (CollectionUtils.isEmpty(carts)){
 //            return null;
 //        }
-        //5.查询购物车数据
-        return carts.stream().map( o -> JsonUtils.toBean(o.toString(),Cart.class)).collect(Collectors.toList());
+        List<Cart> carts = values.stream().map(o -> JsonUtils.toBean(o.toString(), Cart.class)).collect(Collectors.toList());
+        return carts;
     }
 
     /**
@@ -115,7 +115,7 @@ public class CartServiceImpl implements CartService {
         //1.获取登录用户
         UserInfo userInfo = UserInterceptor.getLoginUser();
         String key = KEY_PREFIX + userInfo.getId();
-        BoundHashOperations<String,Object,Object> hashOperations = this.stringRedisTemplate.boundHashOps(key);
+        BoundHashOperations<String,Object,Object> hashOperations = redisTemplate.boundHashOps(key);
         //2.获取购物车
         String json = hashOperations.get(skuId.toString()).toString();
         Cart cart = JsonUtils.toBean(json,Cart.class);
@@ -133,8 +133,9 @@ public class CartServiceImpl implements CartService {
         //1.获取登录用户
         UserInfo userInfo = UserInterceptor.getLoginUser();
         String key = KEY_PREFIX + userInfo.getId();
-        BoundHashOperations<String,Object,Object> hashOperations = this.stringRedisTemplate.boundHashOps(key);
+        BoundHashOperations<String,Object,Object> hashOperations = redisTemplate.boundHashOps(key);
         //2.删除商品
         hashOperations.delete(skuId);
     }
+
 }

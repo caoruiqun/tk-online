@@ -68,14 +68,15 @@ public class UserController {
 
 
     /**
-     * 用户验证
+     * 用户验证 根据用户名和密码查询用户
      * @param username
      * @param password
      * @return
      */
-    @GetMapping("query")
-    public ResponseEntity<User> queryUser(@RequestParam("username")String username, @RequestParam("password")String password){
-        User user = this.userService.queryUser(username,password);
+    @GetMapping("/query")
+    public ResponseEntity<User> queryUserByUserNameAndPassword(@RequestParam("username") String username,
+                                                               @RequestParam("password")String password){
+        User user = userService.queryUserByUserNameAndPassword(username,password);
         if (user == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

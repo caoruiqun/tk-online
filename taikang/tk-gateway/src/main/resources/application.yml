@@ -22,7 +22,7 @@ zuul:
       serviceId: upload-service
       strip-prefix: false
   add-host-header: true #添加host头信息
-  sensitive-headers:
+  sensitive-headers:  #不写，所有敏感头都放行
 hystrix:
   command:
     default:
@@ -35,16 +35,15 @@ ribbon:
   ReadTimeout: 3500 # ribbon读取超时时间(ms)
   MaxAutoRetriesNextServer: 0 # 切换服务重试次数
   MaxAutoRetries: 0 # 当前服务重试次数
-
-#tk:
-#  jwt:
-#    pubKeyPath: D:\tmp\rsa\rsa.pub #公钥地址
-#    cookieName: TK_TOKEN
-#  filer:
-#    allowPaths:
-#      - /api/auth
-#      - /api/search
-#      - /api/user/register
-#      - /api/user/check
-#      - /api/user/code
-#      - /api/item
+tk:
+  jwt:
+    pubKeyPath: D:\tmp\rsa\rsa.pub #公钥地址
+    cookieName: TK_TOKEN
+  filer:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item

@@ -2,6 +2,7 @@ package com.taikang.cart.config;
 
 import com.taikang.cart.interceptor.UserInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Feature: 配置过滤器
  */
 @Configuration
-//@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties(JwtProperties.class)
 public class MvcConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -26,7 +27,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(userInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(userInterceptor()).addPathPatterns("/**");  //也可直接new UserInterceptor(jwtProperties)
     }
 
 //    @Bean

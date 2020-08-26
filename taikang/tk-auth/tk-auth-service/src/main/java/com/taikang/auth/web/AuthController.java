@@ -8,7 +8,9 @@ import com.taikang.auth.utils.JwtUtils;
 import com.taikang.common.enums.ExceptionEnum;
 import com.taikang.common.exception.TkException;
 import com.taikang.common.utils.CookieUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @create: 2020-06-20 11:32
  **/
 @RestController
+@EnableConfigurationProperties(JwtProperties.class)
 public class AuthController {
 
     @Autowired
@@ -47,7 +50,7 @@ public class AuthController {
         //写入cookie
         CookieUtils.setCookie(request, response, jwtProperties.getCookieName(), token, true);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     /**
@@ -63,7 +66,7 @@ public class AuthController {
             //解析Token
             UserInfo userInfo = JwtUtils.getInfoFromToken(token, jwtProperties.getPublicKey());
             //2.解析成功要重新刷新token
-            token = JwtUtils.generateToken(userInfo, this.jwtProperties.getPrivateKey(), this.jwtProperties.getExpire());
+            token = JwtUtils.generateToken(userInfo, jwtProperties.getPrivateKey(), jwtProperties.getExpire());
             //3.更新Cookie中的token
             CookieUtils.setCookie(request, response, jwtProperties.getCookieName(), token, true);
             //已登录，返回用户信息

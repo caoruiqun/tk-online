@@ -7,13 +7,13 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:10086/eureka
-    registry-fetch-interval-seconds: 10
+    registry-fetch-interval-seconds: 5
   instance:
-    instance-id: ${spring.application.name}:${server.port}
     prefer-ip-address: true  #当你获取host时，返回的不是主机名，而是ip
     ip-address: 127.0.0.1
-    lease-expiration-duration-in-seconds: 10 #10秒不发送九过期
-    lease-renewal-interval-in-seconds: 5 #每隔5秒发一次心跳
+#    instance-id: ${spring.application.name}:${server.port}
+#    lease-expiration-duration-in-seconds: 10 #10秒不发送九过期
+#    lease-renewal-interval-in-seconds: 5 #每隔5秒发一次心跳
 tk:
   jwt:
     secret: tk@Login(Auth}*^31)&yun6%f3q2 #登录校验的密钥

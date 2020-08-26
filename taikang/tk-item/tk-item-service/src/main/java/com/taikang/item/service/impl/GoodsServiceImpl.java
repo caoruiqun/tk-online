@@ -314,7 +314,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Sku> getSkuListByIds(List<Long> ids) {
+    public List<Sku> querySkuBySpuId(List<Long> ids) {
         List<Sku> skus = skuMapper.selectByIdList(ids);
         if (CollectionUtils.isEmpty(skus)) {
             throw new TkException(ExceptionEnum.GOODS_NOT_FOUND);

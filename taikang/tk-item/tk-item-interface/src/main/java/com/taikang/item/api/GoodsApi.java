@@ -55,8 +55,6 @@ public interface GoodsApi {
     List<Sku> querySkuBySpuId(@RequestParam("id") Long spuId);
 
 
-
-
     /**
      * 根据sku的id查询sku
      * @param id

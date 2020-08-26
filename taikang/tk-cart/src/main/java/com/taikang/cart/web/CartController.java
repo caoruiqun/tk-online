@@ -26,9 +26,11 @@ public class CartController {
      * @return
      * @Param
      */
+    @PostMapping
     public ResponseEntity<Void> addCart(@RequestBody Cart cart) {
         cartService.addCart(cart);
-        return ResponseEntity.ok().build();
+//        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     /**
@@ -38,9 +40,9 @@ public class CartController {
     @GetMapping("/list")
     public ResponseEntity<List<Cart>> queryCartList(){
         List<Cart> carts = this.cartService.queryCartList();
-        if(carts == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+//        if(carts == null){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
         return ResponseEntity.ok(carts);
     }
 

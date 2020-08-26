@@ -26,4 +26,5 @@ public class FilterProperties {
     public void setAllowPaths(List<String> allowPaths) {
         this.allowPaths = allowPaths;
     }
+
 }
