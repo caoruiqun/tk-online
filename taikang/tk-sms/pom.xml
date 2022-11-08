@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.sms</groupId>
     <artifactId>tk-sms</artifactId>
 
     <dependencies>
@@ -49,6 +49,5 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

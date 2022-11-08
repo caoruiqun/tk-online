@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.search</groupId>
     <artifactId>tk-search</artifactId>
 
     <dependencies>
@@ -41,7 +41,7 @@
 
         <!--商品微服务-->
         <dependency>
-            <groupId>com.taikang.service</groupId>
+            <groupId>com.taikang.item</groupId>
             <artifactId>tk-item-interface</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -73,6 +73,5 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

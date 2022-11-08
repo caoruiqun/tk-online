@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.auth</groupId>
     <artifactId>tk-auth</artifactId>
     <packaging>pom</packaging>
     <modules>

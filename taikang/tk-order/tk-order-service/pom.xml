@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>tk-order</artifactId>
-        <groupId>com.taikang.service</groupId>
+        <groupId>com.taikang.order</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.order</groupId>
     <artifactId>tk-order-service</artifactId>
 
     <dependencies>
@@ -38,7 +38,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.taikang.service</groupId>
+            <groupId>com.taikang.item</groupId>
             <artifactId>tk-item-interface</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -86,7 +86,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.taikang.service</groupId>
+            <groupId>com.taikang.order</groupId>
             <artifactId>tk-order-interface</artifactId>
             <version>1.0.0</version>
         </dependency>

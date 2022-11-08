@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.cart</groupId>
     <artifactId>tk-cart</artifactId>
 
     <dependencies>
@@ -43,7 +43,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.taikang.service</groupId>
+            <groupId>com.taikang.item</groupId>
             <artifactId>tk-item-interface</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.taikang.service</groupId>
+    <groupId>com.taikang.upload</groupId>
     <artifactId>tk-upload</artifactId>
 
     <dependencies>
