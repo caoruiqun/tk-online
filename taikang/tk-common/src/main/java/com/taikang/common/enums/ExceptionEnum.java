@@ -1,6 +1,7 @@
 package com.taikang.common.enums;
 
 public enum ExceptionEnum {
+//    public static final EXCEPTIONEnum ff = new ExceptionEnum(400, "价格不能为空！");
 
 //    PRICE_CANNOT_BE_NULL(400,"价格不能为空！"),
     CATEGORY_NOT_FOUND(404,"商品分类没查到！"),
@@ -26,12 +27,13 @@ public enum ExceptionEnum {
     ORDER_STATUS_NOT_FOUND(404,"订单状态不存在！"),
     INVAILD_USER_DATA_TYPE(400,"用户数据类型无效！"),
     INVAILD_VERIFY_CODE(400,"无效的验证码！"),
-    REGISTRY_FAILED(500,"注册失败！"),
+    REGISTRY_FAILED(500,"注册失败！")
     ;
 
     private Integer code;
     private String msg;
 
+    // 枚举默认私有的，任何人不能访问
     ExceptionEnum() {
     }
 

@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/tk?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
-    password: "084032"
+    password: root  #"084032"
     driver-class-name: com.mysql.cj.jdbc.Driver
   rabbitmq:
     host: 127.0.0.1
